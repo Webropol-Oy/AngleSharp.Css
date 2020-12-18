@@ -337,7 +337,7 @@ namespace AngleSharp.Css.Values
             var green = 0.0;
             var blue = 0.0;
 
-            if (ratio < 1.0) 
+            if (ratio < 1.0)
             {
                 w *= ratio;
                 b *= ratio;
@@ -354,7 +354,7 @@ namespace AngleSharp.Css.Values
             var v = 1.0 - b;
             var n = w + f * (v - w);
 
-            switch (p) 
+            switch (p)
             {
                 default:
                 case 6:
@@ -390,6 +390,19 @@ namespace AngleSharp.Css.Values
                 }
                 else
                 {
+                    const double delta = 0.000_000_1d;
+                    if (Math.Abs(Alpha - 1d) <= delta) // opaque color
+                    {
+                        var hexRepresentation = String.Join(string.Empty,
+                            "#",
+                            R.ToString("X2", CultureInfo.InvariantCulture),
+                            G.ToString("X2", CultureInfo.InvariantCulture),
+                            B.ToString("X2", CultureInfo.InvariantCulture)
+                        );
+
+                        return hexRepresentation;
+                    }
+
                     var fn = FunctionNames.Rgba;
                     var args = String.Join(", ", new[]
                     {
